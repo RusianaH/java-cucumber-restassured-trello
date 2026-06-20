@@ -13,14 +13,11 @@ Feature: Delete Board Validation
     And the response body is equal to '<error_message>'
     Examples:
       | id                         | status_code             | error_message                         |
-      | invalid                    | 400                     | missing scopes                            |
+      | invalid                    | 400                     | invalid id                            |
       | 60d847d9aad2437cb984f8e1   | 404                     | The requested resource was not found. |
 
     Scenario Outline: Check Delete Board With Invalid Auth
       Given a request with '<auth_condition>' auth condition
-      And the request has query params:
-        |   key     |   <key>     |
-        |   token   |   <token>   |
       And the request has path params:
         |   name    | value                        |
         |   id      |6947fb6d9cd8d0e89aa127ee      |
@@ -28,11 +25,10 @@ Feature: Delete Board Validation
       Then the response status code is 401
       And the response body is equal to '<error_message>'
       Examples:
-      Examples:
         | auth_condition | error_message                     |
         | no_auth        | missing scopes                    |
         | only_key       | missing scopes                    |
-        | only_token     | missing scopes                    |
+        | only_token     | invalid key                 |
         | another_user   | unauthorized permission requested |
 
 

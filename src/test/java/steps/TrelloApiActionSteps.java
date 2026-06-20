@@ -45,7 +45,7 @@ public class TrelloApiActionSteps {
 
     @And("the request has body params:")
     public void theRequestHasBodyParam(DataTable dataTable) {
-        scenarioContext.setRequest(scenarioContext.getRequest().body(dataTable.asMap()));
+        scenarioContext.setRequest(scenarioContext.getRequest().queryParams(dataTable.asMap()));
     }
 
     @And("the request has headers:")
