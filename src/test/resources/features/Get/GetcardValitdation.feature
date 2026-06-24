@@ -18,6 +18,9 @@ As a Trello API user
 
     Scenario Outline: Check Card with invalid Auth
       Given a request without authorization
+      And the request has query params:
+        | key   | <key>   |
+        | token | <token> |
       And the request has path params:
         | name      | value                      |
         | id        | 6947fc42b45c789bd50ef244   |
@@ -25,7 +28,6 @@ As a Trello API user
       Then the response status code is 401
       And the response body is equal to '<error_message>'
       Examples:
-        | auth_condition | error_message                          |
-        | no_auth        | unauthorized card permission requested |
-        | only_key       | unauthorized card permission requested |
-        | only_token     | unauthorized card permission requested |
+        | key               | token                 | error_message     |
+        | empty_value       | current_user_token    | invalid key       |
+        | current_user_key  | empty_value           | missing scopes    |

@@ -17,7 +17,10 @@ Feature: Delete card Validation
       | 60d847d9aad2437cb984f8e1   | 404                     | The requested resource was not found. |
 
   Scenario Outline: Check Delete card With Invalid Auth
-    Given a request with '<auth_condition>' auth condition
+    Given a request without authorization
+    And the request has query params:
+      | key   | <key>   |
+      | token | <token> |
     And the request has path params:
       |   name    | value                        |
       |   id      |6947fc42b45c789bd50ef244      |
@@ -25,12 +28,10 @@ Feature: Delete card Validation
     Then the response status code is 401
     And the response body is equal to '<error_message>'
     Examples:
-      | auth_condition | error_message                     |
-      | no_auth        | missing scopes                    |
-      | only_key       | missing scopes                    |
-      | only_token     | invalid key                       |
-      | another_user   | unauthorized card permission requested |
-
+      | key                | token                  | error_message                           |
+      | empty_value        | current_user_token     | invalid key                             |
+      | current_user_key   | empty_value            | missing scopes                          |
+      | another_user_key   | another_user_token     | unauthorized card permission requested  |
 
 
 

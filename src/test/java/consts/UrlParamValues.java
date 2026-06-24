@@ -8,6 +8,8 @@
 
         public static final String VALID_KEY = dotenv.get("KEY");
         public static final String VALID_TOKEN = dotenv.get("TOKEN");
+        public static final String ANOTHER_KEY = dotenv.get("ANOTHER_KEY");
+        public static final String ANOTHER_USER_TOKEN = dotenv.get("ANOTHER_TOKEN");
 
 
 

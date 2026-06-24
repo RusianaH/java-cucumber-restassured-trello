@@ -7,6 +7,7 @@ public class ScenarioContext {
 
     private RequestSpecification request;
     private Response response;
+    private String boardId;
 
     public RequestSpecification getRequest() {
         return request;
@@ -22,5 +23,14 @@ public class ScenarioContext {
 
     public void setResponse(Response response) {
         this.response = response;
+    }
+
+    public String getBoardId() {
+
+        return boardId;
+    }
+
+    public void setBoardId(String boardId) {
+        this.boardId = boardId;
     }
 }

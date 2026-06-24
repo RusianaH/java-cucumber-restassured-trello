@@ -1,23 +1,30 @@
-Feature: Create Board
+Feature: Create Boards
   As a Trello API user
-  I want to create a new board
-  So that I can organize my tasks
+  I want to create my board
+  So that I want to call a single endpoint that will create my board
 
-  Scenario: Successfully create a board
+  @deleteBoard
+  Scenario: Check Create Board
+    #Create a board
     Given a request with authorization
-    And the request has "name" body param with value "New Board"
-    When the 'POST' request is sent to '/1/boards/' endpoint
+    And the request has body params:
+      | name | Created New Board |
+    And the request has headers:
+      | Content-Type | application/json |
+    When the 'POST' request is sent to 'CREATE_A_BOARD' endpoint
     Then the response status code is 200
     And body value has the following values by paths:
-      | path | expected_value |
-      | name | New Board      |
-
-  Scenario: Created board appears in board list
-    Given a new board is created
-    And a request with authorization
+      | path | expected_value    |
+      | name | Created New Board |
+    And the board ID from the response is remembered
+    #Check board created
+    Given a request with authorization
+    And the request has query params:
+      | fields | id,name |
     And the request has path params:
-      | name   | value      |
+      | name   | value        |
       | member | rusianahlm |
-    When the 'GET' request is sent to '/1/members/{member}/boards' endpoint
+    When the 'GET' request is sent to 'GET_ALL_BOARDS' endpoint
     Then the response status code is 200
-    And the response body contains board name "New Board"
+    And the response body has any item by paths:
+      | id | created_board_id |

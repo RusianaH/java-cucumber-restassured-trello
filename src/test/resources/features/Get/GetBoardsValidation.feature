@@ -4,20 +4,23 @@ Feature: Get Boards validation
   So that i want to call a single endpoint that will return my board only for me
 
   Scenario Outline: Check Get Board with Invalid Id
-    Given  a request with authorization
+    Given a request with authorization
     And the request has path params:
-    |name   | value     |
-    |id     |<id_value> |
+      | name | value      |
+      | id   | <id_value> |
     When the 'GET' request is sent to 'GET_A_BOARD' endpoint
     Then the response status code is <status_code>
     And the response body is equal to '<error_message>'
     Examples:
-      | id_value                | status_code       | error_message                        |
-      | invalid                 | 400               | invalid id                           |
-      |60d847d9aad2437cb984f8e1 | 404               | The requested resource was not found.|
+      | id_value                 | status_code | error_message                         |
+      | invalid                  | 400         | invalid id                            |
+      | 60d847d9aad2437cb984f8e1 | 404         | The requested resource was not found. |
 
   Scenario Outline: Check Get Board with Invalid Auth
-    Given a request with '<auth_condition>' auth condition
+    Given a request without authorization
+    And the request has query params:
+      | key   | <key>   |
+      | token | <token> |
     And the request has path params:
       | name | value                    |
       | id   | 6947fb6d9cd8d0e89aa127ee |
@@ -25,10 +28,7 @@ Feature: Get Boards validation
     Then the response status code is 401
     And the response body is equal to '<error_message>'
     Examples:
-      | auth_condition | error_message                     |
-      | no_auth        | unauthorized permission requested |
-      | only_key       | missing scopes                    |
-      | only_token     | invalid key                       |
-      | another_user   | unauthorized permission requested |
-
-
+      | key               | token                 | error_message                       |
+      | empty_value       | current_user_token    | invalid key                        |
+      | current_user_key  | empty_value           | missing scopes                    |
+      | another_user_key  | another_user_token    | unauthorized permission requested |

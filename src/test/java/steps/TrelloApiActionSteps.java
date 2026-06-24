@@ -9,10 +9,13 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import utils.AuthReqProvider;
 
 public class TrelloApiActionSteps {
 
@@ -32,20 +35,20 @@ public class TrelloApiActionSteps {
         return RestAssured.given();
     }
 
+
     @Given("a request {with} authorization")
     public void aRequestWithAuthorization(boolean withAuth) {
-        scenarioContext.setRequest(withAuth ? requestWithAuth() : requestWithoutAuth());
+        scenarioContext.setRequest(withAuth ? AuthReqProvider.requestWithAuth() : AuthReqProvider.requestWithoutAuth());
     }
 
     @And("the request has query params:")
-    public void theRequestHasQueryParam(DataTable dataTable) {
-        Map<String, String> queryParams = dataTable.asMap();
+    public void theRequestHasQueryParam(Map<String, String> queryParams) {
         scenarioContext.setRequest(scenarioContext.getRequest().queryParams(queryParams));
     }
 
     @And("the request has body params:")
-    public void theRequestHasBodyParam(DataTable dataTable) {
-        scenarioContext.setRequest(scenarioContext.getRequest().queryParams(dataTable.asMap()));
+    public void theRequestHasBodyParam (Map<String, String> queryParams){
+        scenarioContext.setRequest(scenarioContext.getRequest().queryParams(queryParams));
     }
 
     @And("the request has headers:")
@@ -58,10 +61,14 @@ public class TrelloApiActionSteps {
         Map<String, String> pathParams = new HashMap<>();
         List<Map<String, String>> rows = dataTable.asMaps();
         for (Map<String, String> row : rows) {
-            pathParams.put(row.get("name"), row.get("value"));
+            String rowValue = row.get("value");
+            String value = rowValue.equals("created_board_id") ? scenarioContext.getBoardId() : rowValue;
+            pathParams.put(row.get("name"), value);
         }
         scenarioContext.setRequest(scenarioContext.getRequest().pathParams(pathParams));
     }
+
+
 
     @When("the '{}' request is sent to '{endpoint}' endpoint")
     public void theRequestIsSentToEndpoint(CurlOption.HttpMethod method, Endpoint endpoint) {
@@ -86,4 +93,28 @@ public class TrelloApiActionSteps {
         };
         scenarioContext.setRequest(request);
     }
+    @Given("a new board is created")
+    public void aNewBoardIsCreated() {
+        requestWithAuth()
+                .queryParam("name", "New Board")
+                .post(Endpoint.CREATE_A_BOARD.getUrl());
+        scenarioContext.setRequest(requestWithAuth());
+    }
+    @And("the response body contains board name {string}")
+    public void theResponseBodyContainsBoardName(String boardName) {
+        List<String> boardNames = scenarioContext.getResponse().jsonPath().getList("name", String.class);
+        MatcherAssert.assertThat(boardNames, Matchers.hasItem(boardName));
+    }
+    @When("the board ID from the response is remembered")
+    public void theBoardIdFromTheResponseIsRemembered() {
+        String createdBoardId = scenarioContext.getResponse().body()
+                .jsonPath().getString("id");
+        scenarioContext.setBoardId(createdBoardId);
 }
+//    @When("the cards ID from the response is remembered")
+//    public void theBoardIdFromTheResponseIsRemembered() {
+//        String createdBoardId = scenarioContext.getResponse().body()
+//                .jsonPath().getString("id");
+//        scenarioContext.setBoardId(createdBoardId);
+//    }
+};
