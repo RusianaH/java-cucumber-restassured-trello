@@ -20,7 +20,7 @@ public class TrelloApiAssertSteps {
 
     @Then("the response status code is {int}")
     public void theResponseStatusCodeIs(int expectedStatusCode) {
-        scenarioContext.getResponse().then().log().ifValidationFails().statusCode(expectedStatusCode);
+        scenarioContext.getResponse().then().statusCode(expectedStatusCode);
     }
 
     @And("the response matches '{}' schema")

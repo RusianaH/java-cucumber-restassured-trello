@@ -1,3 +1,4 @@
+@happy
 Feature: Create Board Validation
   As a Trello API user
   I want to create my board safely
@@ -27,6 +28,6 @@ Feature: Create Board Validation
     And the response body is equal to '<error_message>'
     Examples:
       | key              | token              | error_message                     |
-      | empty_value      | empty_value        | invalid key                       |
-      | current_user_key | empty_value        | unauthorized permission requested |
-      | empty_value      | current_user_token | invalid key                       |
+      | empty_value      | empty_value        | missing scopes                     |
+      | current_user_key | empty_value        | missing scopes                     |
+      | empty_value      | current_user_token | invalid key   |

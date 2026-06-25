@@ -1,3 +1,4 @@
+@happy
 Feature: Get Boards validation
   As a Trello API user
   I want to have my board protected

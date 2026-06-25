@@ -111,10 +111,10 @@ public class TrelloApiActionSteps {
                 .jsonPath().getString("id");
         scenarioContext.setBoardId(createdBoardId);
 }
-//    @When("the cards ID from the response is remembered")
-//    public void theBoardIdFromTheResponseIsRemembered() {
-//        String createdBoardId = scenarioContext.getResponse().body()
-//                .jsonPath().getString("id");
-//        scenarioContext.setBoardId(createdBoardId);
-//    }
+    @When("the card ID from the response is remembered")
+    public void theCardIdFromTheResponseIsRemembered() {
+        String createdCardId = scenarioContext.getResponse().body()
+                .jsonPath().getString("id");
+        scenarioContext.setCardId(createdCardId);
+    }
 };

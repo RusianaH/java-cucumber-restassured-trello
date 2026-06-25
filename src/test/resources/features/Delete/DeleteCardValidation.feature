@@ -1,3 +1,4 @@
+@sad
 Feature: Delete card Validation
   As a Trello API user
   I want to Delete my card safely

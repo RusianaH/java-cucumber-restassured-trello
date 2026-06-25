@@ -1,3 +1,4 @@
+@happy
 Feature: update Board
   As a trello API user
   I want to update my board
@@ -11,8 +12,6 @@ Feature: update Board
       | id     |  686f5ddb7fbbd86a580ce442 |
     And the request has query params:
       | name | Updated Name |
-    And the request has headers:
-      | Content-type| Application/json        |
     When the 'PUT' request is sent to 'UPDATE_A_BOARD' endpoint
     Then the response status code is 200
     And body value has the following values by paths:
@@ -25,6 +24,7 @@ Feature: update Board
     And the request has query params:
       |fields  |  id,name     |
     And the request has path params:
+      |name    |  value                      |
       | id     |  686f5ddb7fbbd86a580ce442   |
     When the 'GET' request is sent to 'UPDATE_A_BOARD' endpoint
     Then the response status code is 200

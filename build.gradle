@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.spacialcircumstances.gradle-cucumber-reporting' version '0.1.25'
 }
 
 group = 'org.example'
@@ -23,7 +24,7 @@ dependencies {
             'org.junit.jupiter:junit-jupiter-params:5.14.2',
             'org.junit.platform:junit-platform-launcher:1.14.2',
             'io.cucumber:cucumber-picocontainer:7.13.0',
-            'org.junit.platform:junit-platform-suite-engine:1,9,0'
+            'org.junit.platform:junit-platform-suite-engine:1.14.2'
 
     )
 }
@@ -31,4 +32,9 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty "cucumber.junit-platform.naming-strategy", "long"
+}
+cucumberReports {
+    projectNameOverride = 'Trello cucumber BDD Test Project'
+    outputDir = file('build/cucumber-report')
+    reports = files('build/cucumber-report/json/cucumber-report.json')
 }

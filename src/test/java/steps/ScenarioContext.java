@@ -29,8 +29,15 @@ public class ScenarioContext {
 
         return boardId;
     }
+    public String getCardId() {
+
+        return boardId;
+    }
 
     public void setBoardId(String boardId) {
+        this.boardId = boardId;
+    }
+    public void setCardId(String boardId) {
         this.boardId = boardId;
     }
 }
